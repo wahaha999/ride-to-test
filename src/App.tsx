@@ -1,58 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import React, { Suspense, useEffect } from 'react';
+import {
+  Switch,
+  Route,
+} from 'react-router-dom';
+import { useAppDispatch } from './app/hooks';
+import { getPosts, getTopics } from './AppSlice';
+
+const PostsPage = React.lazy(() => import('./pages/Posts'));
+const Header = React.lazy(() => import('./components/Header'));
+const Footer = React.lazy(() => import('./components/Footer'));
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+  const dispatch = useAppDispatch();
+
+    useEffect(() => {
+        dispatch(getTopics());
+        dispatch(getPosts("query { posts(order: NEWEST) { edges { node { id, name, description, commentsCount, productLinks { type, url }, media { type, url, videoUrl }, votesCount, tagline } } } }"));        
+        // eslint-disable-next-line
+    }, []);
+
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <Header />
+            <Switch>
+                <Route exact path="/">
+                    <PostsPage />
+                </Route>
+            </Switch>
+            <Footer />
+        </Suspense>
+    );
 }
 
 export default App;
