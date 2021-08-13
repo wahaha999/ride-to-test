@@ -95,7 +95,6 @@ export const getPosts = (query: string): AppThunk => (
         const data: Post[] = posts.data.data.posts.edges.map((postData: any) => {
             return postData.node;
         });
-        console.log(data);
         dispatch(getPostsSuccess(data));
     }).catch(err => {
         dispatch(setLoading(false));
@@ -114,7 +113,6 @@ export const getTopics = (): AppThunk => (
         const data: Topic[] = topics.data.data.topics.edges.map((topicData: any) => {
             return topicData.node;
         });
-        console.log(data);
         dispatch(getTopicsSuccess(data));
     }).catch(err => {
         dispatch(getTopicsFail(err.response.data.message));

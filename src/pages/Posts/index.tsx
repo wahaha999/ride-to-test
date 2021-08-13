@@ -40,34 +40,36 @@ const PostsPage: FC<any> = (): ReactElement => {
 
     return (
         <Container className={clsx(
-            classes.root,
-            loading && [classes.loading]
+            classes.root
           )}>
-            {loading ? <CircularProgress /> : (
-                <Grid container spacing={3} justifyContent="center">
-                    <Grid item xs={4}>
-                        <Typography variant="h5">Filters</Typography>
-                        <Filter />
-                    </Grid>
-                    <Grid item xs={8}>
-                        <Typography variant="h5">Products</Typography>
-                        {data.map((post: Post) => (
-                            <PostCard
-                                key={post.id}
-                                post={post}
-                            />
-                        ))}
-                        <Pagination
-                            count={Math.ceil(posts.length / EVENTS_PER_PAGE)}
-                            page={page + 1}
-                            variant="outlined"
-                            shape="rounded"
-                            classes={{ root: classes.pagination }}
-                            onChange={handlePageChange}
-                        />
-                    </Grid>
-                </Grid>
+            { loading && (
+                <div className={classes.loading}>
+                    <CircularProgress />
+                </div>  
             )}
+            <Grid container spacing={3} justifyContent="center">
+                <Grid item xs={4}>
+                    <Typography variant="h5">Filters</Typography>
+                    <Filter />
+                </Grid>
+                <Grid item xs={8}>
+                    <Typography variant="h5">Products</Typography>
+                    {data.map((post: Post) => (
+                        <PostCard
+                            key={post.id}
+                            post={post}
+                        />
+                    ))}
+                    <Pagination
+                        count={Math.ceil(posts.length / EVENTS_PER_PAGE)}
+                        page={page + 1}
+                        variant="outlined"
+                        shape="rounded"
+                        classes={{ root: classes.pagination }}
+                        onChange={handlePageChange}
+                    />
+                </Grid>
+            </Grid>
         </Container>
     );
 };

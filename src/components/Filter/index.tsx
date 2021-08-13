@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, ListItem, ListItemText, Card, Typography, ListItemAvatar, ListItemSecondaryAction, Avatar } from '@material-ui/core';
-import { FixedSizeList } from 'react-window';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
 import { Topic, getPosts } from '../../AppSlice';
@@ -27,10 +27,14 @@ const useStyles = makeStyles((theme) => ({
         borderRadius: 4,
         width: theme.spacing(3),
         height: theme.spacing(3),
+    },
+    postsCount: {
+        marginLeft: 'auto',
+        flex: 'none'
     }
 }));
 
-function RenderRow(props: { data: any; index: any; style: any; }) {
+function RenderRow(props: ListChildComponentProps) {
     const classes = useStyles();
     const dispatch = useAppDispatch();    
     const { data, index, style } = props;
@@ -40,7 +44,7 @@ function RenderRow(props: { data: any; index: any; style: any; }) {
     }
 
     return (
-        <ListItem button style={style} key={index} onClick={() => handleClick()}>
+        <ListItem button style={style} onClick={() => handleClick()}>
             <ListItemAvatar>
               <Avatar
                 alt={data[index].slug}
@@ -48,15 +52,13 @@ function RenderRow(props: { data: any; index: any; style: any; }) {
                 className={classes.avatar}
               />
             </ListItemAvatar>
-            <ListItemText id={data[index].id} primary={data[index].name} />
-            <ListItemSecondaryAction>
-                <ListItemText id={data[index].id} primary={data[index].postsCount} />
-            </ListItemSecondaryAction>
+            <ListItemText primary={data[index].name} />
+            <ListItemText primary={data[index].postsCount} className={classes.postsCount} />
         </ListItem>
     );
 }
 
-const FilterComponent: FC<any> = () => {
+export default function FilterList() {
     const classes = useStyles();
     const topics: Topic[] = useAppSelector((state: RootState) => state.post.topics);
 
@@ -70,6 +72,4 @@ const FilterComponent: FC<any> = () => {
             </Card>            
         </Box>
     );
-}
-
-export default FilterComponent;
+  }
