@@ -39,7 +39,24 @@ function RenderRow(props: ListChildComponentProps) {
     const { data, index, style } = props;
 
     const handleClick = () => {
-        dispatch(getPosts(`query { posts(order: VOTES, topic: "${data[index].slug}") { edges { node { id, name, url, description, commentsCount, reviewsCount, productLinks { type, url }, media { type, url, videoUrl }, thumbnail { type, url, videoUrl }, votesCount, tagline } } } }`));
+        dispatch(getPosts(`query 
+                    { posts(order: VOTES, topic: "${data[index].slug}") { 
+                        edges { 
+                            node { 
+                                id, 
+                                name, 
+                                url, 
+                                description, 
+                                commentsCount, 
+                                reviewsCount, 
+                                productLinks { type, url }, 
+                                media { type, url, videoUrl }, 
+                                thumbnail { type, url, videoUrl }, 
+                                votesCount, tagline 
+                            } 
+                        } 
+                    } 
+                }`));
     }
 
     return (

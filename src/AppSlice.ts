@@ -107,7 +107,23 @@ export const getTopics = (): AppThunk => (
     getState,
 ) => {
     const promises = [
-        axios.post(`https://api.producthunt.com/v2/api/graphql`, { query: "query { topics(order: FOLLOWERS_COUNT) { edges { node { id, name, description, image, followersCount, postsCount, slug, url } } } }" })
+        axios.post(`https://api.producthunt.com/v2/api/graphql`, 
+                    { query: `query { 
+                        topics(order: FOLLOWERS_COUNT) { 
+                            edges { 
+                                node { 
+                                    id, 
+                                    name, 
+                                    description, 
+                                    image, 
+                                    followersCount, 
+                                    postsCount, 
+                                    slug, 
+                                    url 
+                                } 
+                            } 
+                        } 
+                    }`})
     ];
     Promise.all(promises).then(([topics]) => {
         const data: Topic[] = topics.data.data.topics.edges.map((topicData: any) => {
