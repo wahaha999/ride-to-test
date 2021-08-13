@@ -15,7 +15,7 @@ function App() {
 
     useEffect(() => {
         dispatch(getTopics());
-        dispatch(getPosts("query { posts(order: NEWEST) { edges { node { id, name, description, commentsCount, productLinks { type, url }, media { type, url, videoUrl }, votesCount, tagline } } } }"));        
+        dispatch(getPosts("query { posts(order: VOTES) { edges { node { id, name, url, description, commentsCount, reviewsCount, productLinks { type, url }, media { type, url, videoUrl }, thumbnail { type, url, videoUrl }, votesCount, tagline } } } }"));
         // eslint-disable-next-line
     }, []);
 

@@ -1,8 +1,10 @@
 import React, { FC } from 'react';
-import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, ListItem, ListItemText, Card, Typography } from '@material-ui/core';
+import { Box, ListItem, ListItemText, Card, Typography, ListItemAvatar, ListItemSecondaryAction, Avatar } from '@material-ui/core';
 import { FixedSizeList } from 'react-window';
+import { useAppSelector, useAppDispatch } from '../../app/hooks';
+import { RootState } from '../../app/store';
+import { Topic, getPosts } from '../../AppSlice';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -20,37 +22,50 @@ const useStyles = makeStyles((theme) => ({
     },
     topicList: {
         marginBottom: 20
+    },
+    avatar: {
+        borderRadius: 4,
+        width: theme.spacing(3),
+        height: theme.spacing(3),
     }
 }));
 
-function renderRow(props: { index: any; style: any; }) {
-    const { index, style } = props;
+function RenderRow(props: { data: any; index: any; style: any; }) {
+    const classes = useStyles();
+    const dispatch = useAppDispatch();    
+    const { data, index, style } = props;
+
+    const handleClick = () => {
+        dispatch(getPosts(`query { posts(order: VOTES, topic: "${data[index].slug}") { edges { node { id, name, url, description, commentsCount, reviewsCount, productLinks { type, url }, media { type, url, videoUrl }, thumbnail { type, url, videoUrl }, votesCount, tagline } } } }`));
+    }
 
     return (
-        <ListItem button style={style} key={index}>
-            <ListItemText primary={`Item ${index + 1}`} />
+        <ListItem button style={style} key={index} onClick={() => handleClick()}>
+            <ListItemAvatar>
+              <Avatar
+                alt={data[index].slug}
+                src={data[index].image}
+                className={classes.avatar}
+              />
+            </ListItemAvatar>
+            <ListItemText id={data[index].id} primary={data[index].name} />
+            <ListItemSecondaryAction>
+                <ListItemText id={data[index].id} primary={data[index].postsCount} />
+            </ListItemSecondaryAction>
         </ListItem>
     );
 }
 
-renderRow.propTypes = {
-    index: PropTypes.number.isRequired,
-    style: PropTypes.object.isRequired,
-};
-
-interface FilterProps {
-    
-}
-
-const FilterComponent: FC<FilterProps> = ({}) => {
+const FilterComponent: FC<any> = () => {
     const classes = useStyles();
+    const topics: Topic[] = useAppSelector((state: RootState) => state.post.topics);
 
     return (
         <Box className={classes.root}>
             <Card className={classes.card}>
                 <Typography className={classes.title} variant="h6">Filter by topics</Typography>
-                <FixedSizeList height={300} width="100%" itemSize={35} itemCount={200} className={classes.topicList}>
-                    {renderRow}
+                <FixedSizeList height={300} width="100%" itemSize={35} itemData={topics} itemCount={topics.length} className={classes.topicList} >
+                    {RenderRow}
                 </FixedSizeList>
             </Card>            
         </Box>

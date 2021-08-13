@@ -22,6 +22,9 @@ export interface Post {
     media: Media[];
     votesCount: number;
     tagline: string;
+    thumbnail: Media;
+    reviewsCount: number;
+    url: string;
 }
 
 export interface Topic {

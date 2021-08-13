@@ -7,7 +7,6 @@ import { RootState } from '../../app/store';
 import { Post } from '../../AppSlice';
 import PostCard from "../../components/Post";
 import Filter from "../../components/Filter";
-import { useHistory } from "react-router-dom";
 import clsx from 'clsx';
 
 const useStyles = makeStyles({
@@ -29,14 +28,9 @@ const EVENTS_PER_PAGE = 10;
 
 const PostsPage: FC<any> = (): ReactElement => {
     const classes = useStyles();
-    const history = useHistory();
-    const posts: Post[] = useAppSelector((state: RootState) => state.post.posts);
+    const posts: Post[] = useAppSelector((state: RootState) => state.post.posts);    
     const loading: boolean = useAppSelector((state: RootState) => state.post.loading);
     const [page, setPage] = useState(0);
-
-    const handleShowComments = (postId: string) => {
-        history.push(`/${postId}`);
-    }
 
     const handlePageChange = (e: React.ChangeEvent<unknown>, page: number) => {
         setPage(page - 1);
@@ -61,7 +55,6 @@ const PostsPage: FC<any> = (): ReactElement => {
                             <PostCard
                                 key={post.id}
                                 post={post}
-                                handleClick={() => handleShowComments(post.id)}
                             />
                         ))}
                         <Pagination
