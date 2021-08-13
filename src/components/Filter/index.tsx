@@ -1,6 +1,5 @@
-import React, { FC } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Box, ListItem, ListItemText, Card, Typography, ListItemAvatar, ListItemSecondaryAction, Avatar } from '@material-ui/core';
+import { Box, ListItem, ListItemText, Card, Typography, ListItemAvatar, Avatar } from '@material-ui/core';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { RootState } from '../../app/store';
